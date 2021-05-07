@@ -88,7 +88,7 @@ for cluster in clusters:
 
 If you want to interact with DaskGateway directly through python:
 1. Generate a JupyterHub token from `http://<JupyterHub address>/hub/token` and save it.
-1. Then from your console
+1. Then from your console connect to Dask. The IP is the Dask Gateway IP, NOT the IP for JupyterHub.
 ```
 export JUPYTERHUB_API_TOKEN=<YOUR TOKEN>
 [user@machine gke-dask]# python3
