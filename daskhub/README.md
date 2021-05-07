@@ -32,6 +32,9 @@ or image configuration. This has to be enabled explicitly.
 
 ## Usage
 
+Below you will find information on how to use the Dask Gateway installation and basic snippets for getting you started. 
+Further Dask usage needs to be consulted in the official Dask pages. 
+
 ### Through JupyterHub
 
 You need to request a JupyterHub user account and link to the cluster administrator.
@@ -42,5 +45,59 @@ other customizations.
 
 Each user is assigned a 10GB disk for his personal files.
 
+The following figure illustrates a basic example. 
+1. You connect to the gateway (no configuration needed!), create a cluster and get the client. You can scale the cluster
+to the required size.
+```
+from dask_gateway import GatewayCluster
+cluster = GatewayCluster(image="xxx/yyy:zzz")
+client = cluster.get_client()
+```
+It's also possible to create a cluster by clicking on `CLUSTERS ... +NEW` on the left panels. However currently 
+this will generate a LOCAL cluster, i.e. living in your JupyterHub pod.
+2. You will get a `Dashboard` URL. Copy paste it (including the IP!) to the top-left Dask widget, if you want to enable
+   fancy displays.
+2. Run your computation, in this example interact with a dask array.
+2. Shutdown the cluster. If you don't shut down the cluster, it will stay around occupying resources until you disconnect.
+```
+cluster.shutdown()
+```
+Also note that (not shown in the image) you can interact with the existing clusters. You don't need a new cluster each time.
+```
+from dask_gateway import Gateway
+gateway = Gateway()
+clusters = gateway.list_clusters()
+cluster = gateway.connect(clusters[0].name)
+# RUN YOUR COMPUTATION
+cluster.shutdown()
+```
+In order to delete all your old clusters, you can run:
+```
+from dask_gateway import Gateway
+gateway = Gateway()
+clusters = gateway.list_clusters()
+for cluster in clusters:
+    print ("Stopping cluster {0}".format(cluster.name))
+    gateway.stop_cluster(cluster.name)
+```
+
 ![Hello](https://github.com/gcp4hep/analysis-cluster/blob/main/daskhub/images/dg_basic.png)
+
+### Through JupyterHub
+
+If you want to interact with DaskGateway directly through python:
+1. Generate a JupyterHub token from `http://<JupyterHub address>/hub/token` and save it.
+1. Then from your console
+```
+export JUPYTERHUB_API_TOKEN=<YOUR TOKEN>
+[user@machine gke-dask]# python3
+Python 3.6.8 (default, Nov 16 2020, 16:55:22)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-44)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from dask_gateway import Gateway
+>>> gateway = Gateway("http://<DASK GATEWAY IP>/services/dask-gateway", auth='jupyterhub')
+>>> cluster = gateway.new_cluster(image='fbarreir/daskgateway:latest')
+>>> client = cluster.get_client()
+>>> # RUN YOUR COMPUTATION
+```
 
