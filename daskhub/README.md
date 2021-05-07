@@ -2,10 +2,11 @@
 
 ## Installation 
 
-Official daskhub installation instructions are here: https://docs.dask.org/en/latest/setup/kubernetes-helm.html
+This documentation will refer to our installation process of Dask Gateway + JupyterHub on a Kubernetes backend, in particular
+using the `daskhub` helm chart. The official `daskhub` installation instructions are here: https://docs.dask.org/en/latest/setup/kubernetes-helm.html
 
-Helm and other pre-requisites have to be followed from the official documentation. The file `values.yaml` contains the configuration 
-of our current installation.  
+Helm and other pre-requisites have to be followed from the official documentation. The file `values.yaml` contains our 
+desired configuration .
 ```
 helm upgrade --wait --install --render-subchart-notes dhub dask/daskhub --values=secrets.yaml
 ```
