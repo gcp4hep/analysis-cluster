@@ -1,0 +1,46 @@
+jupyterhub:
+  proxy:
+    secretToken: <TOKEN 1>
+  hub:
+    services:
+      dask-gateway:
+        apiToken: <TOKEN 2>
+    networkPolicy:
+      enabled: False
+    config:
+      Authenticator:
+        admin_users:
+          - <admin_user>
+        allowed_users:
+          - <user1>
+          - <user2>
+      DummyAuthenticator:
+        password: <PASSWORD>
+      JupyterHub:
+        authenticator_class: dummy
+
+dask-gateway:
+  traefik:
+    service:
+      type: LoadBalancer
+  gateway:
+    auth:
+      jupyterhub:
+        apiToken: <TOKEN 2>
+    extraConfig:
+      optionHandler: |
+        from dask_gateway_server.options import Options, Integer, Float, String
+        def option_handler(options):
+            if ":" not in options.image:
+                raise ValueError("When specifying an image you must also provide a tag")
+            return {
+                "image": options.image,
+            "worker_cores": options.worker_cores,
+            "worker_memory": int(options.worker_memory * 2 ** 30),
+            }
+        c.Backend.cluster_options = Options(
+            Integer("worker_cores", default=1, min=1, max=4, label="Worker Cores"),
+            Float("worker_memory", default=1, min=1, max=8, label="Worker Memory (GiB)"),
+            String("image", default="daskgateway/dask-gateway:0.9.0", label="Image"),
+            handler=option_handler,
+        )
