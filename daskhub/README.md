@@ -42,5 +42,5 @@ other customizations.
 
 Each user is assigned a 10GB disk for his personal files.
 
-![Hello](../images/dg_basic.png)
+![Hello](https://github.com/gcp4hep/analysis-cluster/blob/main/daskhub/images/dg_basic.png)
 
