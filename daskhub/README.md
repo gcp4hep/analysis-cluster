@@ -84,7 +84,7 @@ for cluster in clusters:
 
 ![Hello](https://github.com/gcp4hep/analysis-cluster/blob/main/daskhub/images/dg_basic.png)
 
-### Through JupyterHub
+### Interact directly with Dask Gateway
 
 If you want to interact with DaskGateway directly through python:
 1. Generate a JupyterHub token from `http://<JupyterHub address>/hub/token` and save it.
