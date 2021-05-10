@@ -56,9 +56,12 @@ client = cluster.get_client()
 ```
 It's also possible to create a cluster by clicking on `CLUSTERS ... +NEW` on the left panels. However currently 
 this will generate a LOCAL cluster, i.e. living in your JupyterHub pod.
+
 2. You will get a `Dashboard` URL. Copy paste it (including the IP!) to the top-left Dask widget, if you want to enable
    fancy displays.
+
 2. Run your computation, in this example interact with a dask array.
+
 2. Shutdown the cluster. If you don't shut down the cluster, it will stay around occupying resources until you disconnect.
 ```
 cluster.shutdown()
