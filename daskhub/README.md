@@ -46,6 +46,8 @@ other customizations.
 
 Each user is assigned a 10GB disk for his personal files.
 
+### Basic creation and shutdown of a Dask cluster
+
 The following figure illustrates a basic example. 
 1. You connect to the gateway (no configuration needed!), create a cluster and get the client. You can scale the cluster
 to the required size.
@@ -66,7 +68,14 @@ this will generate a LOCAL cluster, i.e. living in your JupyterHub pod.
 ```
 cluster.shutdown()
 ```
-Also note that (not shown in the image) you can interact with the existing clusters. You don't need a new cluster each time.
+
+![Hello](https://github.com/gcp4hep/analysis-cluster/blob/main/daskhub/images/dg_basic.png)
+
+### Dask cluster management
+
+> :warning: Please use the system carefully and don't leave idle clusters around
+
+Also note that (not shown in the previous image) you can interact with the existing clusters. You don't need a new cluster each time.
 ```
 from dask_gateway import Gateway
 gateway = Gateway()
@@ -84,8 +93,6 @@ for cluster in clusters:
     print ("Stopping cluster {0}".format(cluster.name))
     gateway.stop_cluster(cluster.name)
 ```
-
-![Hello](https://github.com/gcp4hep/analysis-cluster/blob/main/daskhub/images/dg_basic.png)
 
 ### Interact directly with Dask Gateway
 
