@@ -46,7 +46,7 @@ other customizations.
 
 Each user is assigned a 10GB disk for his personal files.
 
-### Basic creation and shutdown of a Dask cluster
+#### Basic creation and shutdown of a Dask cluster
 
 The following figure illustrates a basic example. 
 1. You connect to the gateway (no configuration needed!), create a cluster and get the client. You can scale the cluster
@@ -71,7 +71,7 @@ cluster.shutdown()
 
 ![Hello](https://github.com/gcp4hep/analysis-cluster/blob/main/daskhub/images/dg_basic.png)
 
-### Dask cluster management
+#### Dask cluster management
 
 > :warning: Please use the system carefully and don't leave idle clusters around
 
