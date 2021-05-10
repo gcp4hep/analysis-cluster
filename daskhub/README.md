@@ -51,7 +51,7 @@ The following figure illustrates a basic example.
 to the required size.
 ```
 from dask_gateway import GatewayCluster
-cluster = GatewayCluster(image="xxx/yyy:zzz")
+cluster = GatewayCluster(worker_cores=1, worker_memory=2, image="xxx/yyy:zzz")
 client = cluster.get_client()
 ```
 It's also possible to create a cluster by clicking on `CLUSTERS ... +NEW` on the left panels. However currently 
