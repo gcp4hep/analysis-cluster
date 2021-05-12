@@ -113,7 +113,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### User and worker environment
 
-User and worker environment need to match. That means if you are using a particular package, compatible versions of it need to be installed on your user environment (e.g. your jupyter session or your python client) and the Dask workers. We are currently exploring the best way to have a stable setup that covers the requirements of the users (but we need to know what the users want).
+User and worker environment need to match. That means if you are using a particular package, compatible versions of it need to be installed on your user environment (e.g. your jupyter session or your python client) and the Dask workers. In the case of a LOCAL cluster client and workers run on the same environment and you don't need to pay attention on matching environments. 
+
+We are currently exploring the best way to have a stable setup that covers the requirements of the users (but we need to know what the users want).
 
 | Jupyter image | Conda env | Worker image | Description |
 | ------------- | ------------- | ----- | ----- |
