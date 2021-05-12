@@ -41,8 +41,7 @@ Further Dask usage needs to be consulted in the official Dask pages.
 You need to request a JupyterHub user account and link to the cluster administrator.
 
 Each user runs on an independent pod. For example the current image is `pangeo/base-notebook:2020.11.06`, but this
-will evolve over time. At this stage we have not evaluated possibilities of providing different `conda` environments or
-other customizations. 
+will evolve over time. At this stage we have not evaluated possibilities of providing different images and/or `conda` environments. 
 
 Each user is assigned a 10GB disk for his personal files.
 
@@ -112,3 +111,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> # RUN YOUR COMPUTATION
 ```
 
+### User and worker environment
+
+User and worker environment need to match. That means if you are using a particular package, compatible versions of it need to be installed on your user environment (e.g. your jupyter session or your python client) and the Dask workers. We are currently exploring the best way to have a stable setup that covers the requirements of the users (but we need to know what the users want).
+
+| Jupyter image | Conda env | Worker image | Description |
+| ------------- | ------------- | ----- | ----- |
+| pangeo/base-notebook:2020.11.06 | notebook | daskgateway/dask-gateway:0.9.0 | Basic Dask installation |
