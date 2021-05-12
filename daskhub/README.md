@@ -117,4 +117,4 @@ User and worker environment need to match. That means if you are using a particu
 
 | Jupyter image | Conda env | Worker image | Description |
 | ------------- | ------------- | ----- | ----- |
-| pangeo/base-notebook:2020.11.06 | notebook | daskgateway/dask-gateway:0.9.0 | Basic Dask installation |
+| [pangeo/base-notebook:2020.11.06](https://github.com/pangeo-data/pangeo-docker-images) | notebook | [daskgateway/dask-gateway:0.9.0](https://github.com/dask/dask-gateway/tree/main/dask-gateway) | Basic Dask installation |
