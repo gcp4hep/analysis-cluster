@@ -8,7 +8,7 @@ using the `daskhub` helm chart. The official `daskhub` installation instructions
 Helm and other pre-requisites have to be followed from the official documentation. The file `values.yaml` contains our 
 desired configuration .
 ```
-helm upgrade --wait --install --render-subchart-notes dhub dask/daskhub --values=secrets.yaml
+helm upgrade --wait --install --render-subchart-notes dhub dask/daskhub --values=values.yaml
 ```
 
 ## Explanations for relevant sections in our `values.yaml` configuration 
