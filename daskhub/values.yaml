@@ -16,7 +16,7 @@ jupyterhub:
       - display_name: "PHYSLITE environment"
         description: "environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
         kubespawner_override:
-          image: <to-be-added>
+          image: eu.gcr.io/gke-dev-311213/jupyter-physlite:20210526
     extraEnv:
       ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
       RUCIO_HOME: /srv/conda/envs/notebook
