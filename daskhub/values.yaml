@@ -12,7 +12,7 @@ jupyterhub:
       - display_name: "ML environment"
         description: "keras, flatbuffers, joblib, pillow, pytz, scikit-learn, scipy, uproot, root-numpy"
         kubespawner_override:
-          image: eu.gcr.io/gke-dev-311213/jupyter-ml:20210518
+          image: eu.gcr.io/gke-dev-311213/jupyter-ml:20210603.v5
       - display_name: "PHYSLITE environment"
         description: "environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
         kubespawner_override:
@@ -102,6 +102,12 @@ dask-gateway:
     backend:
       worker:
         extraPodConfig:
+          # Schedule workers to node pools with dask=worker taints
+          tolerations:
+            - key: "dask"
+              operator: "Equal"
+              value: "worker"
+              effect: "NoSchedule"
           volumes:
             - name: atlas
               persistentVolumeClaim:
