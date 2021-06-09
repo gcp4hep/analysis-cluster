@@ -7,3 +7,15 @@ RUN conda install --yes -c conda-forge -n notebook nb_conda_kernels root keras=2
 
 # necessary since root-numpy depends on root package installation
 RUN source activate notebook && pip install energyflow root-numpy sklearn==0.0 awkward==1.1.1 uproot==4.0.2
+
+# gfal2 is necessary for rucio download
+RUN conda install --yes -c conda-forge -n notebook python-gfal2 gfal2 gfal2-util
+
+# install rucio clients
+ENV PATH=/srv/conda/envs/notebook/bin:$PATH
+RUN pip install --no-cache-dir rucio-clients
+RUN cp /srv/conda/envs/notebook/etc/rucio.cfg.atlas.client.template /srv/conda/envs/notebook/etc/rucio.cfg
+
+# rucio settings and CA certificates
+ENV RUCIO_HOME=/srv/conda/envs/notebook/
+ENV X509_CERT_DIR=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/etc/grid-security-emi/certificates
