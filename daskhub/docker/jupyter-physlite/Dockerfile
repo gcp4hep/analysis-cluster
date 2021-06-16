@@ -7,4 +7,8 @@ ENV PATH=/srv/conda/envs/notebook/bin:$PATH
 RUN pip install --no-cache-dir rucio-clients
 RUN cp /srv/conda/envs/notebook/etc/rucio.cfg.atlas.client.template /srv/conda/envs/notebook/etc/rucio.cfg
 RUN pip install --no-cache-dir numpy h5py numba uproot awkward pyarrow coffea aiohttp
-RUN pip install --no-cache-dir git+https://gitlab.cern.ch/nihartma/physlite-experiments@e11521d5d67248b5f463087b7afde5cae78b02b8
+RUN pip install --no-cache-dir git+https://gitlab.cern.ch/nihartma/physlite-experiments@f5d092ffdfc03d35a6318f9cc9091d9de3b9fd45
+COPY 0001-Bugfix-check-for-file-like-objects-in-from_parquet.patch /srv/conda/envs/notebook/lib/python3.8/site-packages/awkward/
+WORKDIR /srv/conda/envs/notebook/lib/python3.8/site-packages/awkward
+RUN patch -p3 < 0001-Bugfix-check-for-file-like-objects-in-from_parquet.patch
+WORKDIR /home/jovyan
