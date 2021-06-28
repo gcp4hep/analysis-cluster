@@ -108,51 +108,6 @@ dask-gateway:
               operator: "Equal"
               value: "worker"
               effect: "NoSchedule"
-          volumes:
-            - name: atlas
-              persistentVolumeClaim:
-                claimName: cvmfs-config-atlas
-                readOnly: true
-            - name: atlas-condb
-              persistentVolumeClaim:
-                claimName: cvmfs-config-atlas-condb
-                readOnly: true
-            - name: atlas-nightlies
-              persistentVolumeClaim:
-                claimName: cvmfs-config-atlas-nightlies
-                readOnly: true
-            - name: grid
-              persistentVolumeClaim:
-                claimName: cvmfs-config-grid
-                readOnly: true
-            - name: sft
-              persistentVolumeClaim:
-                claimName: cvmfs-config-sft
-                readOnly: true
-            - name: sft-nightlies
-              persistentVolumeClaim:
-                claimName: cvmfs-config-sft-nightlies
-                readOnly: true
-            - name: unpacked
-              persistentVolumeClaim:
-                claimName: cvmfs-config-unpacked
-                readOnly: true
-        extraContainerConfig:
-           volumeMounts:
-             - name: atlas
-               mountPath: /cvmfs/atlas.cern.ch
-             - name: atlas-condb
-               mountPath: /cvmfs/atlas-condb.cern.ch
-             - name: atlas-nightlies
-               mountPath: /cvmfs/atlas-nightlies.cern.ch
-             - name: grid
-               mountPath: /cvmfs/grid.cern.ch
-             - name: sft
-               mountPath: /cvmfs/sft.cern.ch
-             - name: sft-nightlies
-               mountPath: /cvmfs/sft-nightlies.cern.ch
-             - name: unpacked
-               mountPath: /cvmfs/unpacked.cern.ch
 
     extraConfig:
       optionHandler: |
