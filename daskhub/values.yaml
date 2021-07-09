@@ -108,6 +108,8 @@ dask-gateway:
               operator: "Equal"
               value: "worker"
               effect: "NoSchedule"
+          nodeSelector:
+            dask: "worker"
 
     extraConfig:
       optionHandler: |
