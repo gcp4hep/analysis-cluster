@@ -100,6 +100,17 @@ dask-gateway:
         apiToken: <TOKEN 2>
 
     backend:
+      scheduler:
+        # Cores request/limit for the scheduler.
+        cores:
+          request: 1
+          limit: 1
+
+        # Memory request/limit for the scheduler.
+        memory:
+          request: "4G"
+          limit: "4G"
+
       worker:
         extraPodConfig:
           # Schedule workers to node pools with dask=worker taints
