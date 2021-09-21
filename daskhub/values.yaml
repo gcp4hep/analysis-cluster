@@ -1,10 +1,12 @@
-# file: secrets.yaml
 jupyterhub:
   singleuser:
+    startTimeout: 3600
     # Defines the default image
     image:
       name: eu.gcr.io/gke-dev-311213/jupyter-coffea
       tag: "20210518"
+    extraEnv:
+      ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
     profileList:
       - display_name: "pyHEP environment"
         description: "coffea, uproot..."
@@ -16,10 +18,17 @@ jupyterhub:
       - display_name: "PHYSLITE environment"
         description: "environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
         kubespawner_override:
-          image: eu.gcr.io/gke-dev-311213/jupyter-physlite:20210526
-    extraEnv:
-      ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
-      RUCIO_HOME: /srv/conda/envs/notebook
+          image: eu.gcr.io/gke-dev-311213/jupyter-physlite:20210709
+      - display_name: "ML environment"
+        description: "keras, flatbuffers, joblib, pillow, pytz, scikit-learn, scipy, uproot, root-numpy"
+        kubespawner_override:
+          image: eu.gcr.io/gke-dev-311213/jupyter-ml:20210603.v5
+      - display_name: "ML environment with GPU"
+        description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
+        kubespawner_override:
+           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20210917
+           extra_resource_limits:
+             nvidia.com/gpu: "1"
     storage:
       extraVolumes:
         - name: atlas
@@ -67,12 +76,12 @@ jupyterhub:
           mountPath: /cvmfs/unpacked.cern.ch
 
   proxy:
-    secretToken: <TOKEN1>
+    secretToken: <SECRET_TOKEN>
 
   hub:
     services:
       dask-gateway:
-        apiToken: <TOKEN2>
+        apiToken: <API_TOKEN>
 
     networkPolicy:
       enabled: False
@@ -80,12 +89,11 @@ jupyterhub:
     config:
       Authenticator:
         admin_users:
-          - <admin_user>
+          - ...
         allowed_users:
-          - <user1>
-          - <user2>
+          - ...
       DummyAuthenticator:
-        password: <PASSWORD>
+        password: password
       JupyterHub:
         authenticator_class: dummy
 
@@ -97,7 +105,7 @@ dask-gateway:
   gateway:
     auth:
       jupyterhub:
-        apiToken: <TOKEN 2>
+        apiToken: <API_TOKEN>
 
     backend:
       scheduler:
@@ -108,12 +116,11 @@ dask-gateway:
 
         # Memory request/limit for the scheduler.
         memory:
-          request: "4G"
-          limit: "4G"
+          request: "8G"
+          limit: "16G"
 
       worker:
         extraPodConfig:
-          # Schedule workers to node pools with dask=worker taints
           tolerations:
             - key: "dask"
               operator: "Equal"
@@ -134,8 +141,8 @@ dask-gateway:
             "worker_memory": int(options.worker_memory * 2 ** 30),
             }
         c.Backend.cluster_options = Options(
-            Integer("worker_cores", default=1, min=1, max=4, label="Worker Cores"),
-            Float("worker_memory", default=1, min=1, max=8, label="Worker Memory (GiB)"),
+            Integer("worker_cores", default=1, min=1, max=8, label="Worker Cores"),
+            Float("worker_memory", default=1, min=1, max=32, label="Worker Memory (GiB)"),
             String("image", default="eu.gcr.io/gke-dev-311213/dask-gateway-coffea:20210518", label="Image"),
             handler=option_handler,
         )
