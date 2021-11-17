@@ -8,13 +8,10 @@ jupyterhub:
     extraEnv:
       ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
     profileList:
-      - display_name: "pyHEP environment"
-        description: "coffea, uproot..."
-        default: true
-      - display_name: "ML environment"
-        description: "keras, flatbuffers, joblib, pillow, pytz, scikit-learn, scipy, uproot, root-numpy"
-        kubespawner_override:
-          image: eu.gcr.io/gke-dev-311213/jupyter-ml:20210603.v5
+      # This profile was for initial testing only
+      # - display_name: "pyHEP environment"
+      #  description: "coffea, uproot..."
+      #  default: true
       - display_name: "PHYSLITE environment"
         description: "environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
         kubespawner_override:
@@ -23,10 +20,28 @@ jupyterhub:
         description: "keras, flatbuffers, joblib, pillow, pytz, scikit-learn, scipy, uproot, root-numpy"
         kubespawner_override:
           image: eu.gcr.io/gke-dev-311213/jupyter-ml:20210603.v5
-      - display_name: "ML environment with GPU"
+      - display_name: "ML environment with T4 GPU"
+        description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
+        kubespawner_override:
+           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20211117
+           node_selector:
+             cloud.google.com/gke-accelerator: nvidia-tesla-t4
+           extra_resource_limits:
+             nvidia.com/gpu: "1"
+      - display_name: "ML environment with P100 GPU"
         description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
         kubespawner_override:
            image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20210917
+           node_selector:
+             cloud.google.com/gke-accelerator: nvidia-tesla-p100
+           extra_resource_limits:
+             nvidia.com/gpu: "1"
+      - display_name: "ML environment with K80 GPU"
+        description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
+        kubespawner_override:
+           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20210917
+           node_selector:
+             cloud.google.com/gke-accelerator: nvidia-tesla-k80
            extra_resource_limits:
              nvidia.com/gpu: "1"
     storage:
@@ -116,8 +131,8 @@ dask-gateway:
 
         # Memory request/limit for the scheduler.
         memory:
-          request: "8G"
-          limit: "16G"
+          request: "32G"
+          limit: "100G"
 
       worker:
         extraPodConfig:
