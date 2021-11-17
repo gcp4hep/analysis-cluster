@@ -31,7 +31,7 @@ jupyterhub:
       - display_name: "ML environment with P100 GPU"
         description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
         kubespawner_override:
-           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20210917
+           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20211117
            node_selector:
              cloud.google.com/gke-accelerator: nvidia-tesla-p100
            extra_resource_limits:
@@ -39,7 +39,7 @@ jupyterhub:
       - display_name: "ML environment with K80 GPU"
         description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
         kubespawner_override:
-           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20210917
+           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20211117
            node_selector:
              cloud.google.com/gke-accelerator: nvidia-tesla-k80
            extra_resource_limits:
