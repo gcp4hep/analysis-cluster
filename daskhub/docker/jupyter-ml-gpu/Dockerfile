@@ -20,6 +20,9 @@ RUN cp /srv/conda/envs/notebook/etc/rucio.cfg.atlas.client.template /srv/conda/e
 ENV RUCIO_HOME=/srv/conda/envs/notebook/
 ENV X509_CERT_DIR=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/etc/grid-security-emi/certificates
 
+# install git and openssh
+RUN apt-get update --yes && apt-get install --yes git openssh-client
+
 # environment variables to use the GKE NVIDIA installation
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/nvidia/lib64
 ENV PATH=${PATH}:/usr/local/nvidia/bin

@@ -19,3 +19,6 @@ RUN cp /srv/conda/envs/notebook/etc/rucio.cfg.atlas.client.template /srv/conda/e
 # rucio settings and CA certificates
 ENV RUCIO_HOME=/srv/conda/envs/notebook/
 ENV X509_CERT_DIR=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/etc/grid-security-emi/certificates
+
+# install git and openssh
+RUN apt-get update --yes && apt-get install --yes git openssh-client
