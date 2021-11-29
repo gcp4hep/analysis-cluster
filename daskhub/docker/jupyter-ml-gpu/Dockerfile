@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-c"]
 RUN conda install --yes -c conda-forge -n notebook nb_conda_kernels root flatbuffers=1.12 joblib=1.0.1 pillow=8.1.0 pytz=2021.1 scikit-learn=0.24.1 scipy=1.6.0 cudnn=8.2.1
 
 # necessary since root-numpy depends on root package installation
-RUN source activate notebook && pip install energyflow root-numpy sklearn==0.0 awkward==1.1.1 uproot==4.0.2 tensorflow==2.6.0 cupy-cuda110 cx_Oracle
+RUN source activate notebook && pip install energyflow root-numpy sklearn==0.0 awkward==1.1.1 uproot==4.0.2 tensorflow==2.6.2 cupy-cuda110 cx_Oracle
 
 # gfal2 is necessary for rucio download
 RUN conda install --yes -c conda-forge -n notebook python-gfal2 gfal2 gfal2-util
