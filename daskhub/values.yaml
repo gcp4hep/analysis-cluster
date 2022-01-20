@@ -104,13 +104,21 @@ jupyterhub:
     config:
       Authenticator:
         admin_users:
-          - ...
-        allowed_users:
-          - ...
-      DummyAuthenticator:
-        password: password
+          - <YOUR ADMIN USERS>
+      GenericOAuthenticator:
+        login_service: "ATLAS IAM"
+        client_id: <CLIENT ID IN IAM SERVICE>
+        client_secret: <CLIENT SECRET FROM IAM SERVICE>
+        oauth_callback_url: https://<JUPYTER HOST>/hub/oauth_callback
+        authorize_url: https://<IAM HOST>/authorize
+        token_url: https://<IAM HOST>/token
+        userdata_url: https://<IAM HOST>/userinfo
+        # userdata_method: GET
+        username_key: preferred_username
+        userdata_params:
+          state: state
       JupyterHub:
-        authenticator_class: dummy
+        authenticator_class: generic-oauth
 
 dask-gateway:
   traefik:
