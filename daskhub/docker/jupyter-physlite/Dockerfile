@@ -8,5 +8,5 @@ RUN pip install --no-cache-dir rucio-clients
 RUN cp /srv/conda/envs/notebook/etc/rucio.cfg.atlas.client.template /srv/conda/envs/notebook/etc/rucio.cfg
 RUN pip install --no-cache-dir numpy h5py numba pyarrow aiohttp
 RUN pip install --no-cache-dir google.cloud.bigquery_storage google-cloud-bigquery
-RUN pip install --no-cache-dir uproot 'awkward>=1.4' coffea vector particle 'hist[plot]'
-RUN pip install --no-cache-dir git+https://gitlab.cern.ch/nihartma/physlite-experiments@4b872add80af1a95b532bfb2d456784180eefee7
+RUN pip install --no-cache-dir uproot 'awkward>=1.4' 'coffea>=0.7.10' vector particle 'hist[plot]'
+RUN pip install --no-cache-dir git+https://gitlab.cern.ch/nihartma/physlite-experiments@103aa4284448ce7eb7e943e00cf6cfcf1fe065f4
