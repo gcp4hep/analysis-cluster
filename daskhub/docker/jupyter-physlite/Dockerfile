@@ -1,5 +1,5 @@
 # Documentation: https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html
-FROM pangeo/base-notebook:2021.07.06
+FROM pangeo/base-notebook:2022.03.08
 USER root
 RUN apt-get update --yes && apt-get install --yes git openssh-client
 USER jovyan
