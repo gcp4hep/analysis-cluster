@@ -1,6 +1,6 @@
 jupyterhub:
   singleuser:
-    startTimeout: 200
+    startTimeout: 900
     # Defines the default image
     image:
       name: eu.gcr.io/gke-dev-311213/jupyter-coffea
@@ -40,6 +40,17 @@ jupyterhub:
              cloud.google.com/gke-accelerator: nvidia-tesla-k80
            extra_resource_limits:
              nvidia.com/gpu: "1"
+      - display_name: "ML environment on megamem node"
+        description: "Similar to the previous ML environment, but it boots a VM with 1.4TB memory just for YOU. Only to be used when working on applications requiring huge amounts of memory. Setting up your notebook can take 10 minutes."
+        kubespawner_override:
+          image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20211209
+          extra_resource_guarantees:
+            memory: "1T"
+          tolerations:
+            - key: megamem
+              operator: "Equal"
+              value: "true"
+              effect: NoSchedule
     storage:
       extraVolumes:
         - name: cvmfs
