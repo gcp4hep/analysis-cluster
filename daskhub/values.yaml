@@ -1,6 +1,6 @@
 jupyterhub:
   singleuser:
-    startTimeout: 3600
+    startTimeout: 200
     # Defines the default image
     image:
       name: eu.gcr.io/gke-dev-311213/jupyter-coffea
@@ -8,18 +8,14 @@ jupyterhub:
     extraEnv:
       ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
     profileList:
-      # This profile was for initial testing only
-      # - display_name: "pyHEP environment"
-      #  description: "coffea, uproot..."
-      #  default: true
-      - display_name: "PHYSLITE environment"
-        description: "environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
+      - display_name: "PHYSLITE environment [prod]"
+        description: "Validated environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
         kubespawner_override:
-          image: eu.gcr.io/gke-dev-311213/jupyter-physlite:20210709
+          image: eu.gcr.io/gke-dev-311213/jupyter-physlite:prod
       - display_name: "ML environment"
-        description: "keras, flatbuffers, joblib, pillow, pytz, scikit-learn, scipy, uproot, root-numpy"
+        description: "tensorflow, keras, flatbuffers, joblib, pillow, pytz, scikit-learn, scipy, uproot, root-numpy"
         kubespawner_override:
-          image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20211209
+           image: eu.gcr.io/gke-dev-311213/jupyter-ml-gpu:20211209
       - display_name: "ML environment with T4 GPU"
         description: "Similar to the previous ML environment, but it boots a VM with a GPU just for YOU. Only to be used when working on ML-GPU applications. Setting up your notebook will take 10 minutes or more."
         kubespawner_override:
@@ -46,49 +42,16 @@ jupyterhub:
              nvidia.com/gpu: "1"
     storage:
       extraVolumes:
-        - name: atlas
-          persistentVolumeClaim:
-            claimName: cvmfs-config-atlas
-            readOnly: true
-        - name: atlas-condb
-          persistentVolumeClaim:
-            claimName: cvmfs-config-atlas-condb
-            readOnly: true
-        - name: atlas-nightlies
-          persistentVolumeClaim:
-            claimName: cvmfs-config-atlas-nightlies
-            readOnly: true
-        - name: grid
-          persistentVolumeClaim:
-            claimName: cvmfs-config-grid
-            readOnly: true
-        - name: sft
-          persistentVolumeClaim:
-            claimName: cvmfs-config-sft
-            readOnly: true
-        - name: sft-nightlies
-          persistentVolumeClaim:
-            claimName: cvmfs-config-sft-nightlies
-            readOnly: true
-        - name: unpacked
-          persistentVolumeClaim:
-            claimName: cvmfs-config-unpacked
+        - name: cvmfs
+          hostPath:
+            path: /var/lib/cvmfs-k8s
+            type: Directory
             readOnly: true
       extraVolumeMounts:
-        - name: atlas
-          mountPath: /cvmfs/atlas.cern.ch
-        - name: atlas-condb
-          mountPath: /cvmfs/atlas-condb.cern.ch
-        - name: atlas-nightlies
-          mountPath: /cvmfs/atlas-nightlies.cern.ch
-        - name: grid
-          mountPath: /cvmfs/grid.cern.ch
-        - name: sft
-          mountPath: /cvmfs/sft.cern.ch
-        - name: sft-nightlies
-          mountPath: /cvmfs/sft-nightlies.cern.ch
-        - name: unpacked
-          mountPath: /cvmfs/unpacked.cern.ch
+        - name: cvmfs
+          mountPath: /cvmfs
+          readOnly: true
+          mountPropagation: HostToContainer
 
   proxy:
     secretToken: <SECRET_TOKEN>
@@ -98,7 +61,6 @@ jupyterhub:
         - <JUPYTER HOST>
       letsencrypt:
         contactEmail: <ADMIN EMAIL>
-
   hub:
     services:
       dask-gateway:
@@ -125,6 +87,8 @@ jupyterhub:
           state: state
       JupyterHub:
         authenticator_class: generic-oauth
+        # template_vars:
+        #  announcement: 'Access currently restricted until funding is renewed'
 
 dask-gateway:
   traefik:
@@ -166,12 +130,19 @@ dask-gateway:
                 raise ValueError("When specifying an image you must also provide a tag")
             return {
                 "image": options.image,
-            "worker_cores": options.worker_cores,
-            "worker_memory": int(options.worker_memory * 2 ** 30),
+                "worker_cores": options.worker_cores,
+                "worker_memory": int(options.worker_memory * 2 ** 30),
+                "worker_extra_container_config": {
+                    "resources": {
+                        "limits": {"nvidia.com/gpu": options.num_gpus},
+                        "requests": {"nvidia.com/gpu": options.num_gpus},
+                   },
+               },
             }
         c.Backend.cluster_options = Options(
-            Integer("worker_cores", default=1, min=1, max=8, label="Worker Cores"),
-            Float("worker_memory", default=1, min=1, max=32, label="Worker Memory (GiB)"),
+            Integer("worker_cores", default=1, min=1, max=7, label="Worker Cores"),
+            Float("worker_memory", default=1, min=1, max=27, label="Worker Memory (GiB)"),
             String("image", default="eu.gcr.io/gke-dev-311213/dask-gateway-coffea:20210518", label="Image"),
+            Integer("num_gpus", default=0, min=0, max=1, label="Worker GPUs (0-1)"),
             handler=option_handler,
         )
