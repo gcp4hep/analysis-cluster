@@ -8,6 +8,10 @@ jupyterhub:
     extraEnv:
       ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
     profileList:
+      - display_name: "dask-awkward environment"
+            description: "Environment for dask- awkward etc."
+            kubespawner_override:
+              image: eu.gcr.io/gke-dev-311213/dask-awkward:prodprod
       - display_name: "PHYSLITE environment [prod]"
         description: "Validated environment for experiments with DAOD_PHYSLITE with uproot, awkward etc."
         kubespawner_override:
@@ -66,6 +70,8 @@ jupyterhub:
 
   proxy:
     secretToken: <SECRET_TOKEN>
+    service:
+      loadBalancerIP: <MY STATIC IP>
     https:
       enabled: true
       hosts:
